@@ -1,0 +1,14 @@
+{
+  "name": "aoc2020",
+  "description": "aoc2020 utility",
+  "main": "util.js",
+  "bin": "util.js",
+  "scripts": {
+    "build": "pkg . --out-path build --target node14-win && cp ./build/aoc2020.exe ../aoc.exe "
+  },
+  "author": "antti@antti.code",
+  "license": "MIT",
+  "dependencies": {
+    "bent": "^7.3.12"
+  }
+}
