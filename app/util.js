@@ -3,7 +3,7 @@ const fs = require("fs");
 const bent = require("bent");
 const { sessionId, year, templateFile: templateFileArr } = require("./config.json");
 const templateFile = templateFileArr.join("\n");
-const [,, sub, day] = process.argv;
+const [,, sub, day, part] = process.argv;
 
 let dayNum = parseInt(day);
 if(isNaN(dayNum) || dayNum < 1 || dayNum > 25) {
@@ -38,6 +38,7 @@ function wordWrap(str) {
 (async () => {
 
 switch(sub) {
+    case "day":
     case "start":
     case "init": {
         if(fs.existsSync(`day${day}`)) {
@@ -67,12 +68,31 @@ switch(sub) {
         })
         readme = wordWrap(readme)
 
+        input = input.substring(0, input.length - 1);
+
         fs.mkdirSync(`day${day}`);
         fs.writeFileSync(`day${day}/part1.js`, templateFile);
         fs.writeFileSync(`day${day}/readme1`, readme);
         fs.writeFileSync(`day${day}/input.txt`, input);
         console.log("Initialized the day and downloaded input. Use cmd part2.");
         process.exit(0);
+    }
+    case "run": {
+        if(part != "1" && part != "2") {
+            console.error("Invalid part number.");
+            process.exit(0);
+        }
+        if(!fs.existsSync(`day${day}`)) {
+            console.error("That day hasn't been initialized!");
+            process.exit(0);
+        }
+        if(!fs.existsSync(`day${day}/part${part}.js`)) {
+            console.error("That part hasn't been initialized!");
+            process.exit(0);
+        }
+        console.log("Running solution...");
+        require(process.cwd() + `/day${day}/part${part}.js`)
+        process.exit(0)
     }
     case "part2": {
         if(!fs.existsSync(`day${day}`)) {
