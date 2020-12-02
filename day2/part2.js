@@ -18,8 +18,7 @@ const input = inputFile.split("\n").map(v=>{
 let valid = 0;
 
 for(let pw of input) {
-    if(((pw.password[pw.policy.first-1] == pw.policy.char) && (pw.password[pw.policy.second-1] != pw.policy.char))
-    || ((pw.password[pw.policy.first-1] != pw.policy.char) && (pw.password[pw.policy.second-1] == pw.policy.char))) {
+    if((pw.password[pw.policy.first-1] == pw.policy.char) ^ (pw.password[pw.policy.second-1] == pw.policy.char)) {
         valid++;
     }
 }
