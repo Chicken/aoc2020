@@ -1,7 +1,6 @@
 const fs = require("fs");
 const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
-// parse input
 const input = inputFile.split("\n").map(row => row.split(""));
 
 let slopes = [
