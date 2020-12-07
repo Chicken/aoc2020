@@ -2,7 +2,6 @@ const fs = require("fs");
 const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
 const input = inputFile.split("\n").map(v => {
-    // vibrant purple bags contain 3 shiny lavender bags, 1 mirrored gray bag, 4 muted bronze bags.
     let [ bag, content ] = v.split(" contain ");
     bag = bag.split(" ");
     bag.pop();
