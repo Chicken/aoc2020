@@ -8,18 +8,9 @@ const input = inputFile.split("\n").map(v=>{
         second: parseInt(policy.split("-")[1].split(" ")[0]),
         char: policy.split("-")[1].split(" ")[1]
     }
-    return {
-        policy,
-        password
-    }
+    return { policy, password }
 })
 
-let valid = 0;
-
-for(let pw of input) {
-    if((pw.password[pw.policy.first-1] == pw.policy.char) ^ (pw.password[pw.policy.second-1] == pw.policy.char)) {
-        valid++;
-    }
-}
-
-console.log(valid);
+console.log(input.reduce((valid, pw) => {
+    if((pw.password[pw.policy.first-1] == pw.policy.char) ^ (pw.password[pw.policy.second-1] == pw.policy.char)) return ++valid; else return valid;
+},0));
