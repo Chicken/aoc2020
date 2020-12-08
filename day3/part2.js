@@ -3,56 +3,13 @@ const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
 const input = inputFile.split("\n").map(row => row.split(""));
 
-let slopes = [
-    {
-        down: 1,
-        right: 1
-    },
-    {
-        down: 1,
-        right: 3
-    },
-    {
-        down: 1,
-        right: 5
-    },
-    {
-        down: 1,
-        right: 7
-    },
-    {
-        down: 2,
-        right: 1
-    }
-]
-
-let treeAmounts = [];
-
-for(slope of slopes) {
-    let { down, right } = slope;
+console.log([[1,1],[1,3],[1,5],[1,7],[2,1]].reduce((ans, slope) => {
     let x = 0;
-    let y = 0;
-
     let trees = 0;
 
-    while(true) {
-        if(x >= input[0].length) {
-            x -= input[0].length;
-        }
-
-        if(y >= input.length) {
-            break;
-        }
-
-        let tree = (input[y][x] == "#"); 
-
-        if(tree) trees++;
-
-        x += right;
-        y += down;
+    for(let y = 0; y < input.length; y += slope[0], x += slope[1]) {
+        if(input[y][x % input[0].length] == "#") trees++;
     }
 
-    treeAmounts.push(trees);
-}
-
-console.log(treeAmounts.reduce((a, b) => a * b ))
+	return ans * trees;
+}, 1))

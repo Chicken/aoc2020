@@ -3,10 +3,6 @@ const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
 const input = inputFile.split("\n\n").map(pass => pass.replace(/\n/g, " ").split(" ").map(f=>f.split(":")[0]));
 
-let valid = 0;
-
-input.forEach(pass => {
-    if(pass.length == 8 || (pass.length == 7 && !pass.includes("cid"))) valid++;
-})
-
-console.log(valid);
+console.log(input.filter(pass => 
+    pass.length == 8 || (pass.length == 7 && !pass.includes("cid"))
+).length)
