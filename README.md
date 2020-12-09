@@ -1,3 +1,3 @@
-# Advent Of COde 2020
+# Advent Of Code 2020
 
 My inputs, solutions, answers and cli app.
