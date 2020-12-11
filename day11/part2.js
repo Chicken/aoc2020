@@ -19,6 +19,7 @@ function getNeighborAmount(y, x) {
 }
 
 function applyRules() {
+    let changed = false;
     let board = []
     for(let y = 0; y < input.length; y++) {
         board.push([]);
@@ -26,6 +27,7 @@ function applyRules() {
             if(input[y][x] == "L") {
                 let neighbors = getNeighborAmount(y, x);
                 if(neighbors == 0) {
+                    changed = true;
                     board[y].push("#");
                 } else {
                     board[y].push("L");
@@ -33,6 +35,7 @@ function applyRules() {
             } else if(input[y][x] == "#") {
                 let neighbors = getNeighborAmount(y, x);
                 if(neighbors >= 5) {
+                    changed = true;
                     board[y].push("L");
                 } else {
                     board[y].push("#");
@@ -43,20 +46,11 @@ function applyRules() {
         }
     }
     input = board;
+    return changed;
 }
-
-let lastState = input.map(r => r.join("")).join("");
 
 while(true) {
-    applyRules();
-    let key = input.map(r => r.join("")).join("");
-    if(lastState == key) break;
-    lastState = key;
+    if(!applyRules()) break;
 }
 
-console.log(input.reduce((count, row) => {
-    return count + row.reduce((amount, seat) => {
-        if(seat == "#") amount++;
-        return amount;
-    },0)
-},0))
+console.log(input.map(r => r.join("")).join("").match(/#/g).length)
