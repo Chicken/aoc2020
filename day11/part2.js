@@ -5,7 +5,6 @@ let input = inputFile.split("\n").map(r => r.split(""));
 
 function getNeighborAmount(y, x) {
     return [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]].reduce((count, offsets) => {
-        // x,y, offset, count
         let [ yoff, xoff ] = offsets;
         while (true) {
             let xc = x + xoff;
