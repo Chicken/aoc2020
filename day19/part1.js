@@ -1,4 +1,3 @@
-const { strict } = require("assert");
 const fs = require("fs");
 const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
