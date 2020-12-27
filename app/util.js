@@ -1,6 +1,7 @@
 "use strict";
 const fs = require("fs");
 const bent = require("bent");
+const { execSync: exec } = require("child_process");
 const { sessionId, year, templateFile: templateFileArr } = require("./config.json");
 const templateFile = templateFileArr.join("\n");
 const [,, sub, day, part] = process.argv;
@@ -138,6 +139,45 @@ switch(sub) {
     }
     default: {
         console.log("Invalid command! Valid ones are clear/clean, init/start and part2.");
+        process.exit(0);
+    }
+    case "submit":
+    case "verify":
+    case "answer": {
+        if(part != "1" && part != "2") {
+            console.error("Invalid part number.");
+            process.exit(0);
+        }
+        if(!fs.existsSync(`day${day}`)) {
+            console.error("That day hasn't been initialized!");
+            process.exit(0);
+        }
+        if(!fs.existsSync(`day${day}/part${part}.js`)) {
+            console.error("That part hasn't been initialized!");
+            process.exit(0);
+        }
+
+        console.log("Running solution...");
+
+        let answer = exec(`node ./day${day}/part${part}.js`).toString().replace(/\n/g, "");
+        
+        console.log("Answer:", answer);
+        console.log("Submitting...");
+
+        let output;
+        try {
+            output = await bent("POST", 200, "string", `https://adventofcode.com/${year}/day/${day}`, {
+                "Cookie": `session=${sessionId}`,
+                "Content-Type": "application/x-www-form-urlencoded"
+            })("/answer", `level=${part}&answer=${encodeURIComponent(answer)}`);
+        } catch(e) {
+            console.error(e);
+            console.error("Error happened while trying to submit the answer. Please try again.");
+            process.exit(0);
+        };
+
+        output = output.match(/(That's not the right answer|You gave an answer too recently|That's the right answer!)/)[0];
+        console.log("Result:", output);
         process.exit(0);
     }
 }
