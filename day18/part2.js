@@ -1,44 +1,38 @@
 const fs = require("fs");
 const inputFile = fs.readFileSync(__dirname + "/input.txt", "utf-8");
 
+// split all the expressions by newline
 const input = inputFile.split("\n");
 
-function getBrackets(text) {
-    let end = text.lastIndexOf(')');
-    let i = end - 1;
-    let nesting = 1;
-    while (nesting > 0) {
-        let c = text.charAt(i);
-        if (c === ')') nesting++;
-        if (c === '(') nesting--;
-        i--;
-    }
-
-    return text.substring(i + 2, end);
-}
-
+// function to evaluate expressions
 function evaluate(exp) {
+    // while the expression still has parenthesis
     while(exp.indexOf("(") != -1) {
-        let brackets = getBrackets(exp);
-        exp = exp.replace("(" + brackets + ")", evaluate(brackets));
+        // replace them with the value they evaluate to
+        exp = exp.replace(/\([\d+* ]+\)/, e => evaluate(e.substring(1, e.length - 1)));
     }
+    // while the expression still has addition
     while(exp.indexOf("+") != -1){
-        exp = exp.replace(/\d+ \+ \d+/, add => {
-            return eval(add);
-        })
+        // replace them with their value by evaling them
+        exp = exp.replace(/\d+ \+ \d+/, eval);
     }
+    // while the expression still has multiplication
     while(exp.indexOf("*") != -1){
-        exp = exp.replace(/\d+ \* \d+/, mul => {
-            return eval(mul);
-        })
+        // replace them with their value by evaling them
+        exp = exp.replace(/\d+ \* \d+/, eval);
     }
+    // return the answer by parsing the leftover expression to int
     return parseInt(exp);
 }
 
+// keep count of the answer total
 let total = 0;
 
+// loop all the expressions
 for(let exp of input) {
+    // and add their answer to total
     total += evaluate(exp);
 }
 
+// log the answer
 console.log(total);
